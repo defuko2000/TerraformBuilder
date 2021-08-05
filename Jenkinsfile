@@ -42,14 +42,14 @@ pipeline {
                 milestone(1)
                 withCredentials ([usernamePassword(credentialsId: 'staging_webserver', usernameVariable: 'USERNAME', passwordVariable: 'USERPASS')]) {
                     script {
-                        sh "sshpass -p \"$USERPASS\" -v ssh -o StrictHostKeyChecking=no $USERNAME@${env.staging_ip} \"docker pull defuko2000/terraformbuilder:${env.BUILD_NUMBER}\""
+                        sh "sshpass -p '$USERPASS' -v ssh -o StrictHostKeyChecking=no $USERNAME@${env.staging_ip} \"docker pull defuko2000/terraformbuilder:${env.BUILD_NUMBER}\""
                         try {
-                           sh "sshpass -p \"$USERPASS\" -v ssh -o StrictHostKeyChecking=no $USERNAME@${env.staging_ip} \"docker stop terraformbuilder\""
-                           sh "sshpass -p \"$USERPASS\" -v ssh -o StrictHostKeyChecking=no $USERNAME@${env.staging_ip} \"docker rm terraformbuilder\""
+                           sh "sshpass -p '$USERPASS' -v ssh -o StrictHostKeyChecking=no $USERNAME@${env.staging_ip} \"docker stop terraformbuilder\""
+                           sh "sshpass -p '$USERPASS' -v ssh -o StrictHostKeyChecking=no $USERNAME@${env.staging_ip} \"docker rm terraformbuilder\""
                         } catch (err) {
                             echo: 'caught error: $err'
                         }
-                        sh "sshpass -p \"$USERPASS\" -v ssh -o StrictHostKeyChecking=no $USERNAME@${env.staging_ip} \"docker run --restart always --name terraformbuilder -p 8080:8080 -d defuko2000/terraformbuilder:${env.BUILD_NUMBER}\""
+                        sh "sshpass -p '$USERPASS' -v ssh -o StrictHostKeyChecking=no $USERNAME@${env.staging_ip} \"docker run --restart always --name terraformbuilder -p 8080:8080 -d defuko2000/terraformbuilder:${env.BUILD_NUMBER}\""
                     }
                 }
             }
